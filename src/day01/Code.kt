@@ -1,3 +1,8 @@
+package day01
+
+import grouped
+import readInput
+
 fun main() {
     fun part1(input: List<String>) = input.map(String::toIntOrNull).grouped().maxOfOrNull {
         val carriedCalories = it.sum()
@@ -12,11 +17,11 @@ fun main() {
         .take(3)
         .sum()
 
-    val testInput = readInput("Day01_test")
+    val testInput = readInput(::main.javaClass.packageName, "test")
     check(part1(testInput) == 24000)
     check(part2(testInput) == 45000)
 
-    val input = readInput("Day01")
+    val input = readInput(::main.javaClass.packageName, "input")
     println(part1(input))
     println(part2(input))
 }
