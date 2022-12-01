@@ -19,10 +19,10 @@ fun String.md5() = BigInteger(1, MessageDigest.getInstance("MD5").digest(toByteA
 /**
  * Groups a list of T separated by nulls
  */
-fun <T> List<T?>.grouped(): List<List<T>> = mutableListOf(mutableListOf<T>()).apply {
-    this@grouped.forEach {
-        if (it != null) {
-            last().add(it)
+fun <T> List<T?>.grouped(): List<List<T>> = fold(mutableListOf(mutableListOf<T>())) { groups, item ->
+    groups.apply {
+        if (item != null) {
+            last().add(item)
         } else {
             add(mutableListOf())
         }
