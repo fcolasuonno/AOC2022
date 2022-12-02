@@ -10,51 +10,31 @@ private enum class HandShape(val value: Int) {
     Rock(1), Paper(2), Scissor(3)
 }
 
+fun <E> Iterable<E>.cartesian() = flatMap { left -> map { right -> left to right } }
+
 fun main() {
-    val game = mapOf(
-        (HandShape.Rock to HandShape.Rock) to Outcome.Draw,
-        (HandShape.Rock to HandShape.Paper) to Outcome.Win,
-        (HandShape.Rock to HandShape.Scissor) to Outcome.Lost,
-
-        (HandShape.Paper to HandShape.Rock) to Outcome.Lost,
-        (HandShape.Paper to HandShape.Paper) to Outcome.Draw,
-        (HandShape.Paper to HandShape.Scissor) to Outcome.Win,
-
-        (HandShape.Scissor to HandShape.Rock) to Outcome.Win,
-        (HandShape.Scissor to HandShape.Paper) to Outcome.Lost,
-        (HandShape.Scissor to HandShape.Scissor) to Outcome.Draw,
-    )
-    val firstColumnMeaning = mapOf(
-        "A" to HandShape.Rock,
-        "B" to HandShape.Paper,
-        "C" to HandShape.Scissor,
-    )
-    val secondColumnMeaning1 = mapOf(
-        "X" to HandShape.Rock,
-        "Y" to HandShape.Paper,
-        "Z" to HandShape.Scissor,
-    )
+    val game = HandShape.values().toList().cartesian().associateWith { (hand1, hand2) ->
+        when {
+            hand1.value == hand2.value -> Outcome.Draw
+            hand1.value % 3 == (hand2.value - 1) -> Outcome.Win
+            else -> Outcome.Lost
+        }
+    }
 
     fun parse(input: List<String>) = input.map {
         val (other, mine) = it.split(' ')
-        other to mine
+        other.single() to mine.single()
     }
 
     fun part1(input: List<String>) = parse(input).sumOf { (other, mine) ->
-        val otherHand = firstColumnMeaning.getValue(other)
-        val myHand = secondColumnMeaning1.getValue(mine)
+        val otherHand = HandShape.values()[other - 'A']
+        val myHand = HandShape.values()[mine - 'X']
         game.getValue(otherHand to myHand).score + myHand.value
     }
 
-    val secondColumnMeaning2 = mapOf(
-        "X" to Outcome.Lost,
-        "Y" to Outcome.Draw,
-        "Z" to Outcome.Win
-    )
-
     fun part2(input: List<String>) = parse(input).sumOf { (other, mine) ->
-        val otherHand = firstColumnMeaning.getValue(other)
-        val myOutcome = secondColumnMeaning2.getValue(mine)
+        val otherHand = HandShape.values()[other - 'A']
+        val myOutcome = Outcome.values()[mine - 'X']
         val (_, myHand) = game
             .filterKeys { it.first == otherHand }
             .filterValues { it == myOutcome }
