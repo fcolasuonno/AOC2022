@@ -1,0 +1,8 @@
+{
+    "code-runner.clearPreviousOutput": true,
+    "code-runner.enableAppInsights": false,
+    "code-runner.fileDirectoryAsCwd": false,
+    "code-runner.executorMapByFileExtension": {
+        ".kt": "./gradlew run -Pmain=$fullFileName"
+    }
+}

@@ -6,13 +6,20 @@
 	// Use 'settings' to set *default* container specific settings.json values on container create. 
 	// You can edit these settings after create using File > Preferences > Settings > Remote.
 	"settings":{
-		"java.home": "/docker-java-home",
-		"terminal.integrated.shell.linux": "/bin/bash"
+		"java.jdt.ls.java.home": "/opt/java/openjdk",
+		"terminal.integrated.profiles.linux": {
+			"bash": {
+				"path": "bash",
+				"icon": "terminal-bash"
+			}
+		},
+		"terminal.integrated.defaultProfile.linux": "bash"
 	},
     
 	"extensions": [
 		"vscjava.vscode-java-pack",
 		"redhat.vscode-xml",
-		"fwcd.kotlin"
+		"fwcd.kotlin",
+		"formulahendry.code-runner"
 	]
 }
