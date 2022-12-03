@@ -1,0 +1,18 @@
+{
+	"name": "Kotlin Devcontainer",
+	"dockerFile": "Dockerfile",
+	"runArgs": ["-u", "vscode"],
+
+	// Use 'settings' to set *default* container specific settings.json values on container create. 
+	// You can edit these settings after create using File > Preferences > Settings > Remote.
+	"settings":{
+		"java.home": "/docker-java-home",
+		"terminal.integrated.shell.linux": "/bin/bash"
+	},
+    
+	"extensions": [
+		"vscjava.vscode-java-pack",
+		"redhat.vscode-xml",
+		"fwcd.kotlin"
+	]
+}
