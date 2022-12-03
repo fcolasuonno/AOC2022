@@ -8,17 +8,15 @@ repositories {
 }
 
 application {
-    project.property("main")?.let {
-        it.toString()
-            .substringAfterLast("src")
-            .drop(1)
-            .replace(".kt", "Kt")
-            .replace('\\', '.')
-            .replace('/', '.')
-            .also { System.err.println(it) }
-    }?.let {
-        mainClass.set(it)
-    }
+    project.properties["main"]?.toString()
+        ?.substringAfterLast("src")
+        ?.drop(1)
+        ?.replace(".kt", "Kt")
+        ?.replace('\\', '.')
+        ?.replace('/', '.')
+        ?.let {
+            mainClass.set(it)
+        }
 }
 
 tasks {
