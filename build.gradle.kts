@@ -8,7 +8,17 @@ repositories {
 }
 
 application {
-    mainClass.set(project.property("day")?.let { "day$it.CodeKt" })
+    project.property("main")?.let {
+        it.toString()
+            .substringAfterLast("src")
+            .drop(1)
+            .replace(".kt", "Kt")
+            .replace('\\', '.')
+            .replace('/', '.')
+            .also { System.err.println(it) }
+    }?.let {
+        mainClass.set(it)
+    }
 }
 
 tasks {
