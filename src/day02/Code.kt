@@ -42,11 +42,7 @@ fun main() {
         myOutcome.score + myHand.value
     }
 
-    val testInput = readInput(::main.javaClass.packageName, "test")
-    check(part1(testInput) == 15)
-    check(part2(testInput) == 12)
-
-    val input = readInput(::main.javaClass.packageName, "input")
+    val input = readInput(::main.javaClass.packageName)
     println(part1(input))
     println(part2(input))
 }

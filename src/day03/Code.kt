@@ -1,6 +1,5 @@
 package day03
 
-import day02.main
 import readInput
 
 fun main() {
@@ -11,7 +10,7 @@ fun main() {
     }
 
     fun part1(input: List<String>) = input.sumOf { rucksack ->
-        val common = rucksack.chunked(2)
+        val common = rucksack.chunked(rucksack.length / 2)
             .map(String::toSet)
             .reduce(Set<Char>::intersect)
             .single()
@@ -23,12 +22,7 @@ fun main() {
         priority(badge)
     }
 
-    val testInput = readInput(::main.javaClass.packageName, "test")
-
-    check(part1(testInput) == 157)
-    check(part2(testInput) == 70)
-
-    val input = readInput(::main.javaClass.packageName, "input")
+    val input = readInput(::main.javaClass.packageName)
     println(part1(input))
     println(part2(input))
 }

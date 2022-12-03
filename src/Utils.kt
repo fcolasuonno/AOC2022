@@ -1,11 +1,13 @@
 import java.io.File
+import java.lang.management.ManagementFactory
 import java.math.BigInteger
 import java.security.MessageDigest
 
 /**
  * Reads lines from the given input txt file.
  */
-fun readInput(dir: String, name: String) = File(File("src", dir), "$name.txt")
+fun isDebug() = ManagementFactory.getRuntimeMXBean().inputArguments.any { "jdwp=" in it }
+fun readInput(dir: String, test: Boolean = isDebug()) = File(File("src", dir), if (test) "test.txt" else "input.txt")
     .readLines()
 
 /**
@@ -28,3 +30,27 @@ fun <T> List<T?>.grouped(): List<List<T>> = fold(mutableListOf(mutableListOf<T>(
         }
     }
 }
+
+typealias Coord = Pair<Int, Int>
+
+val Coord.neighbours: List<Coord>
+    get() = listOf(
+        Coord(first - 1, second - 1),
+        Coord(first, second - 1),
+        Coord(first + 1, second - 1),
+        Coord(first - 1, second),
+        Coord(first + 1, second),
+        Coord(first - 1, second + 1),
+        Coord(first, second + 1),
+        Coord(first + 1, second + 1)
+    )
+
+val Coord.closeNeighbours: List<Coord>
+    get() = listOf(
+        Coord(first, second - 1),
+        Coord(first - 1, second),
+        Coord(first + 1, second),
+        Coord(first, second + 1)
+    )
+
+fun Long.pow(exponent: Long): Long = (0 until exponent).fold(1L) { a, _ -> a * this }
