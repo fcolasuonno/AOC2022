@@ -11,16 +11,17 @@ fun main() {
     }
 
     fun part1(input: List<String>) = input.sumOf { rucksack ->
-        val first = rucksack.take(rucksack.length / 2).toSet()
-        val second = rucksack.drop(rucksack.length / 2).toSet()
-        val common = first.intersect(second).single()
+        val common = rucksack.chunked(2)
+            .map(String::toSet)
+            .reduce(Set<Char>::intersect)
+            .single()
         priority(common)
     }
 
-    fun part2(input: List<String>) = input.map(String::toSet).chunked(3) { group ->
+    fun part2(input: List<String>) = input.map(String::toSet).chunked(3).sumOf { group ->
         val badge = group.reduce(Set<Char>::intersect).single()
         priority(badge)
-    }.sum()
+    }
 
     val testInput = readInput(::main.javaClass.packageName, "test")
 
