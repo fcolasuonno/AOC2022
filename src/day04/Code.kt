@@ -1,8 +1,9 @@
 package day04
 
 import readInput
+
 operator fun IntRange.contains(other: IntRange) = first in other && last in other
-fun IntRange.overlaps(other: IntRange) = first in other || last in other || other.first in this || other.last in this
+fun IntRange.overlaps(other: IntRange) = first <= other.last && last >= other.first 
 fun String.toIntRange(delimiter: Char = '-') = split(delimiter).map { it.toInt() }.let { it[0]..it[1] }
 
 fun main() {
