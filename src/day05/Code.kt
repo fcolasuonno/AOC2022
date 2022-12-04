@@ -1,4 +1,4 @@
-package template
+package day05
 
 import readInput
 
