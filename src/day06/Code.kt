@@ -1,6 +1,5 @@
-package template
+package day06
 
-import day06.main
 import readInput
 
 fun main() {
