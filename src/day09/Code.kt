@@ -10,7 +10,7 @@ fun main() {
     fun parse(input: List<String>) = input
         .map { motion ->
             val (dir, amount) = motion.split(" ")
-            (0..amount.toInt()).map {
+            (1..amount.toInt()).map {
                 when (dir) {
                     "R" -> Coord(it, 0)
                     "L" -> Coord(-it, 0)
@@ -19,7 +19,7 @@ fun main() {
                 }
             }
         }.reduce { prevSegment, newSegment ->
-            prevSegment + newSegment.drop(1).map { (dx, dy) ->
+            prevSegment + newSegment.map { (dx, dy) ->
                 val (x, y) = prevSegment.last()
                 Coord(x + dx, y + dy)
             }
@@ -37,16 +37,15 @@ fun main() {
 
     fun part1(input: List<Coord>) = buildSet {
         input.fold(Coord(0, 0)) { tail, head ->
-            tail.following(head).also { add(it) }
+            tail.following(head)
+                .also { add(it) }
         }
     }.size
 
     fun part2(input: List<Coord>) = buildSet {
         input.fold(List(9) { Coord(0, 0) }) { tail, head ->
-            var prev = head
-            tail.map { tailKnot ->
-                tailKnot.following(prev).also { prev = it }
-            }.also { add(it.last()) }
+            tail.runningFold(head) { prev, knot -> knot.following(prev) }.drop(1) //remove the head
+                .also { add(it.last()) }
         }
     }.size
 
