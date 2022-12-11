@@ -59,8 +59,8 @@ fun main() {
     fun part1(monkeys: List<Monkey>) = monkeys.keepAway(20) { worry -> (worry / 3.0).toLong() }
 
     fun part2(monkeys: List<Monkey>): Long {
-        val mcd = monkeys.map(Monkey::test).reduce(Long::times)
-        return monkeys.keepAway(10000) { worry -> worry % mcd }
+        val lcm = monkeys.map(Monkey::test).reduce(Long::times)
+        return monkeys.keepAway(10000) { worry -> worry % lcm }
     }
 
 
