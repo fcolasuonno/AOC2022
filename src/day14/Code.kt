@@ -5,53 +5,51 @@ import day06.main
 import readInput
 
 fun main() {
-    fun parse(input: List<String>): Set<Coord> =
-        input.flatMap {
-            it.split(" -> ").map { c -> c.split(",").map(String::toInt).let { (x, y) -> Coord(x, y) } }.zipWithNext()
-                .flatMap { (a, b) ->
-                    (minOf(a.first, b.first)..maxOf(a.first, b.first)).flatMap { x ->
-                        (minOf(a.second, b.second)..maxOf(
-                            a.second,
-                            b.second
-                        )).map { y -> Coord(x, y) }
-                    }
-                }
-        }.toSet()
+    operator fun Coord.rangeTo(other: Coord) = (minOf(first, other.first)..maxOf(first, other.first)).flatMap { x ->
+        (minOf(second, other.second)..maxOf(second, other.second)).map { y -> Coord(x, y) }
+    }
 
-    fun part1(input: List<String>) = parse(input).let { initial ->
-        val max = initial.map { it.second }.max()
-        val start = Coord(500, 0)
-        generateSequence(initial) { current ->
-            generateSequence(start) { sand ->
-                (sand.copy(second = sand.second + 1).takeIf { it !in current } ?: sand.copy(
-                    first = sand.first - 1,
-                    second = sand.second + 1
-                ).takeIf { it !in current } ?: sand.copy(first = sand.first + 1, second = sand.second + 1)
-                    .takeIf { it !in current }
-                        )?.takeIf { it.second < max + 1 }
-            }.last().takeIf {
-                it.second < max
-            }?.let { current + it }
+    fun String.toCoord() = split(",").map(String::toInt).let { (x, y) -> Coord(x, y) }
+
+    fun String.toCorners() = split(" -> ").map(String::toCoord)
+
+    fun parse(input: List<String>): Pair<Set<Coord>, Int> =
+        input.flatMap { it.toCorners().zipWithNext { a, b -> a..b }.flatten() }.toSet()
+            .let { coord -> coord to coord.maxOf(Coord::second) }
+
+    fun part1(initial: Set<Coord>, max: Int) = generateSequence(initial) { current ->
+        generateSequence(Coord(500, 0)) { sand ->
+            listOf(
+                sand.copy(second = sand.second + 1),
+                sand.copy(first = sand.first - 1, second = sand.second + 1),
+                sand.copy(first = sand.first + 1, second = sand.second + 1)
+            ).firstOrNull {
+                it !in current && it.second <= max
+            }
+        }.last().takeIf {
+            it.second < max
+        }?.let {
+            current + it
         }
     }.count() - 1
 
-    fun part2(input: List<String>) = parse(input).let { initial ->
-        val max = initial.map { it.second }.max()
-        val start = Coord(500, 0)
-        generateSequence(initial) { current ->
-            generateSequence(start) { sand ->
-                sand.copy(second = sand.second + 1).takeIf { it !in current && it.second < (max+2) } ?: sand.copy(
-                    first = sand.first - 1,
-                    second = sand.second + 1
-                ).takeIf { it !in current&& it.second < (max+2) } ?: sand.copy(first = sand.first + 1, second = sand.second + 1)
-                    .takeIf { it !in current&& it.second < (max+2) }
-            }.last().takeIf {
-                it != start
-            }?.let { current + it }
+    fun part2(initial: Set<Coord>, max: Int) = generateSequence(initial) { current ->
+        generateSequence(Coord(500, 0)) { sand ->
+            listOf(
+                sand.copy(second = sand.second + 1),
+                sand.copy(first = sand.first - 1, second = sand.second + 1),
+                sand.copy(first = sand.first + 1, second = sand.second + 1)
+            ).firstOrNull {
+                it !in current && it.second < (max + 2)
+            }
+        }.last().takeIf {
+            it != Coord(500, 0)
+        }?.let {
+            current + it
         }
     }.count()
 
-    val input = readInput(::main.javaClass.packageName)
-    println("Part1=\n" + part1(input))
-    println("Part2=\n" + part2(input))
+    val (input, max) = parse(readInput(::main.javaClass.packageName))
+    println("Part1=\n" + part1(input, max))
+    println("Part2=\n" + part2(input, max))
 }
